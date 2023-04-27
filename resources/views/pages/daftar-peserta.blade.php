@@ -7,7 +7,7 @@
     <meta name="viewport">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Kasal Cup JC Supertrack 2023</title>
+    <title>Honda MPS Motor Pandeglang</title>
 
     <!-- Bootstrap CS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -60,12 +60,15 @@
     </style>
     <hr>
     </hr>
-    <div class="mx-3" style="overflow: auto">
+    <div class="mx-3" style="overflow-y: auto">
 
         <form method="GET">
             <select name="kelas" id="kelas" class="form-control mb-2">
                 @foreach ($classList->pluck('kelas')->unique() as $class)
-                    <option value="{{ $class }}">Kelas {{ $class }}</option>
+                    <option value="{{ $class }}"
+                        @if (isset($queries['kelas'])) @if ($queries['kelas'] == $class)
+                            selected @endif
+                        @endif>Kelas {{ $class }}</option>
                 @endforeach
             </select>
             <select name="kategori" id="kategori" class="form-control">
@@ -73,7 +76,14 @@
                     <option value="{{ $category }}">{{ $category }}</option>
                 @endforeach
             </select>
-            <button class="btn btn-primary w-100 mt-2">Filter</button>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary w-100 mt-2">Filter</button>
+                </div>
+                <div class="col-12">
+                    <a href="/daftar-peserta" class="btn btn-secondary w-100 mt-2">Reset</a>
+                </div>
+            </div>
         </form>
 
         <table class="table table-striped table-bordered table-responsive" style="font-size:12px;">
@@ -82,7 +92,9 @@
                     <th width="2%">No</th>
                     <th width="25%">Nama</th>
                     <th width="8%">Merk</th>
-                    <th width="65%">Team</th>
+                    <th width="10%">Team</th>
+                    <th width="30%">Kategori</th>
+                    <th width="20%">Status</th>
                 </tr>
             </thead>
 
@@ -95,6 +107,8 @@
                         </td>
                         <td>{{ $item->merk }}</td>
                         <td>{{ $item->participant->tim }}</td>
+                        <td>{{ $item->kategori }}</td>
+                        <td>{{ $item->participant->konfirmasi }}</td>
                     </tr>
                 @endforeach
             </tbody>

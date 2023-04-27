@@ -27,7 +27,7 @@
 
 <body>
     <header class="container-fluid bg-black text-white">
-        <div class="row">
+        <div class="row" style="position: relative;">
             <div class="col-12 py-2 text-center">
                 <a class="navbar-brand" href="/">
                     <img src="/assets/images/logo.png" alt="Bootstrap" height="70">
@@ -53,9 +53,6 @@
 
         <div class="container py-5">
             <div class="row" style="margin-left:0;margin-right:0;">
-
-
-
                 <div class="col-md-12">
                     <div class="jumbotron daftar">
                         <div class="header">

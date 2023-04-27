@@ -1,0 +1,82 @@
+[
+    {
+        "nama": "SE 50 CC",
+        "kelas": "Utama Motocross",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE 65 NOVICE",
+        "kelas": "Utama Motocross",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE 65 PRO",
+        "kelas": "Utama Motocross",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE 85",
+        "kelas": "Utama Motocross",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE 125",
+        "kelas": "Utama Motocross",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE MX2 NOVICE",
+        "kelas": "Utama Motocross",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE MX2",
+        "kelas": "Utama Motocross",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE MX1",
+        "kelas": "Utama Motocross",
+        "biaya": 600000
+    },
+    {
+        "nama": "Bebek STD Pemula Banten",
+        "kelas": "Grass Track",
+        "biaya": 400000
+    },
+    {
+        "nama": "FFA Formula Banten",
+        "kelas": "Grass Track",
+        "biaya": 400000
+    },
+    {
+        "nama": "Bebek Modif Open",
+        "kelas": "Grass Track",
+        "biaya": 400000
+    },
+    {
+        "nama": "FFA Open",
+        "kelas": "Grass Track",
+        "biaya": 400000
+    },
+    {
+        "nama": "SE Exe A",
+        "kelas": "Executive",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE Exe B",
+        "kelas": "Executive",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE Expro A",
+        "kelas": "Executive",
+        "biaya": 600000
+    },
+    {
+        "nama": "SE Expro B",
+        "kelas": "Executive",
+        "biaya": 600000
+    }
+]

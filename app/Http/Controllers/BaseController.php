@@ -117,4 +117,28 @@ class BaseController extends Controller
             return redirect()->back()->withInput();
         }
     }
+
+    public function daftarPeserta(Request $request)
+    {
+        $queries       = $request->query();
+        $participant   = Motor::with('participant');
+
+
+        $params = ['kelas', 'kategori'];
+        foreach ($params as $param) {
+            if (isset($queries[$param])) {
+                $paramValue = $queries[$param];
+                $participant->where($param, $paramValue);
+            }
+        }
+
+        $participant = collect($participant->get());
+
+        $classList = collect(Motocross::get());
+        return view('pages.daftar-peserta', [
+            'classList'   => $classList,
+            'queries'     => $queries,
+            'participant' => $participant
+        ]);
+    }
 }

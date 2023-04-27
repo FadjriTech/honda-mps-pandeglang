@@ -32,7 +32,7 @@
                         <a href="/form" class="main-button mb-2">
                             Formulir Pendaftaran
                         </a>
-                        <a href="" class="main-button mb-2">
+                        <a href="/daftar-peserta" class="main-button mb-2">
                             Daftar Peserta
                         </a>
                         <a href="" class="main-button mb-2">

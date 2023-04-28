@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/skydash/css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="/skydash/images/favicon.png" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>

@@ -37,3 +37,6 @@ Route::get('login', function () {
 Route::get('admin', [AdminController::class, 'index']);
 Route::get('table', [AdminController::class, 'table']);
 Route::get('load-table', [AdminController::class, 'loadTable']);
+
+Route::post('detail', [AdminController::class, 'getDetail'])->name('participant.detail');
+Route::post('konfirmasi-pembayaran', [AdminController::class, 'konfirmasiPembayaran']);

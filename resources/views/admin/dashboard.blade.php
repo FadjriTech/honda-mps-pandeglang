@@ -16,13 +16,6 @@
             <div class="card tale-bg">
                 <div class="card-people mt-auto">
                     <img src="https://th.bing.com/th/id/OIP.ZSg194ds1zIJF9CwtL1y-wHaFL?pid=ImgDet&rs=1" alt="people">
-                    <div class="weather-info">
-                        <div class="d-flex">
-                            <div class="ml-2">
-                                <h4 class="location font-weight-normal">Honda MPS Pandeglang</h4>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

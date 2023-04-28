@@ -36,3 +36,4 @@ Route::get('login', function () {
 
 Route::get('admin', [AdminController::class, 'index']);
 Route::get('table', [AdminController::class, 'table']);
+Route::get('load-table', [AdminController::class, 'loadTable']);

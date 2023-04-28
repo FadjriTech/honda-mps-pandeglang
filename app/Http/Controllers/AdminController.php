@@ -6,6 +6,7 @@ use App\Models\AdminModel;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\DataTables;
 
 class AdminController extends Controller
 {
@@ -49,5 +50,20 @@ class AdminController extends Controller
         return view('admin.table', [
             'active'      => 'table',
         ]);
+    }
+
+    public function loadTable(Request $request)
+    {
+        $data = Participant::all();
+        $res  =  DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">Edit</a>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+        return $res;
     }
 }

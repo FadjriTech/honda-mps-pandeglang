@@ -7,8 +7,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Daftar Participant</h4>
-                        <div class="table-responsive" id="participant-table">
-                            <table class="table">
+                        <div class="table-responsive">
+                            <table class="table" id="participant-table">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -28,7 +28,9 @@
             </div>
         </div>
     </div>
+@endsection
 
+@section('script')
     <script>
         $(function() {
             $('#participant-table').DataTable({
@@ -42,6 +44,24 @@
                     {
                         data: 'nama',
                         name: 'nama'
+                    },
+                    {
+                        data: 'kota',
+                        name: 'kota'
+                    },
+                    {
+                        data: 'tim',
+                        name: 'tim'
+                    },
+
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false
                     },
                 ]
             });

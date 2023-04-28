@@ -43,6 +43,8 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="/skydash/vendors/js/vendor.bundle.base.js"></script>
     <script src="/skydash/vendors/datatables.net/jquery.dataTables.js"></script>
     <script src="/skydash/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
@@ -54,6 +56,8 @@
     <script src="/skydash/js/todolist.js"></script>
     <script src="/skydash/js/dashboard.js"></script>
     <script src="/skydash/js/Chart.roundedBarCharts.js"></script>
+
+    @yield('script')
 </body>
 
 </html>

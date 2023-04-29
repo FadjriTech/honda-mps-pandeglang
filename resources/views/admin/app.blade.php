@@ -21,6 +21,7 @@
     <!-- endinject -->
     <link rel="shortcut icon" href="/skydash/images/favicon.png" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="/assets/css/admin/styles.css">
 </head>
 
 <body>

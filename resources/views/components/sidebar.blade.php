@@ -13,7 +13,7 @@
             </a>
         </li>
         <li class="nav-item {{ $active == 'pengumuman' ? 'active' : '' }}">
-            <a class="nav-link" href="/pengumuman">
+            <a class="nav-link" href="/announcement">
                 <i class="ti-bookmark-alt menu-icon"></i>
                 <span class="menu-title">Pengumuman</span>
             </a>

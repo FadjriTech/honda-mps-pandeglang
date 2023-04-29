@@ -12,8 +12,6 @@ class Participant extends Model
     protected $table = 'participant';
     protected $primaryKey = 'id';
     protected $guarded =  [''];
-
-
     public function motor(): HasMany
     {
         return $this->hasMany(Motor::class, 'participantId', 'id');

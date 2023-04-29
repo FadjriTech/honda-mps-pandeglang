@@ -50,44 +50,42 @@
 
 @section('script')
     <script>
-        $(function() {
-            $('#participant-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '/load-table',
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        data: 'nama',
-                        name: 'nama'
-                    },
-                    {
-                        data: 'kota',
-                        name: 'kota'
-                    },
-                    {
-                        data: 'tim',
-                        name: 'tim'
-                    },
-                    {
-                        data: 'konfirmasi',
-                        name: 'konfirmasi'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false
-                    },
-                ]
-            });
+        var table = $('#participant-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '/load-table',
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'nama',
+                    name: 'nama'
+                },
+                {
+                    data: 'kota',
+                    name: 'kota'
+                },
+                {
+                    data: 'tim',
+                    name: 'tim'
+                },
+                {
+                    data: 'konfirmasi',
+                    name: 'konfirmasi'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false
+                },
+            ]
         });
 
         $(document).on('click', '.detail-button', function(e) {
@@ -160,6 +158,27 @@
                 return formatter.format(number);
             }
 
+        })
+
+        $(document).on('click', '.delete-button', function() {
+            const participantId = $(this).attr('data-id');
+            if (confirm("Yakin hapus data ini ?")) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/delete-participant/${participantId}`,
+                    dataType: "json",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        table.ajax.reload();
+                    },
+                    error: function(err) {
+                        alert("oops something error");
+                    }
+                });
+            }
         })
     </script>
 @endsection

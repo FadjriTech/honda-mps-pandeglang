@@ -34,6 +34,12 @@ Route::get('login', function () {
     return view('admin.login');
 });
 
+
+
+
+
+
+Route::post('upload-pengumuman', [AdminController::class, 'uploadPengumuman']);
 Route::get('admin', [AdminController::class, 'index']);
 Route::get('table', [AdminController::class, 'table']);
 Route::get('load-table', [AdminController::class, 'loadTable']);
@@ -41,3 +47,9 @@ Route::get('load-table', [AdminController::class, 'loadTable']);
 Route::post('detail', [AdminController::class, 'getDetail'])->name('participant.detail');
 Route::post('konfirmasi-pembayaran', [AdminController::class, 'konfirmasiPembayaran']);
 Route::get('konfirmasi-pembayaran-get/{participantId}', [AdminController::class, 'konfirmasiPembayaranGet']);
+Route::delete('/delete-participant/{participantId}', [AdminController::class, 'deleteParticipant']);
+Route::get('announcement', function () {
+    return view('admin.pengumuman', [
+        'active' => 'pengumuman'
+    ]);
+});

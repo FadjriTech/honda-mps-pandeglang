@@ -30,6 +30,7 @@
                                         <th>Nama</th>
                                         <th>Kota</th>
                                         <th>Tim</th>
+                                        <th>Status</th>
                                         <th>Tanggal Daftar</th>
                                         <th>Action</th>
                                     </tr>
@@ -72,7 +73,10 @@
                         data: 'tim',
                         name: 'tim'
                     },
-
+                    {
+                        data: 'konfirmasi',
+                        name: 'konfirmasi'
+                    },
                     {
                         data: 'created_at',
                         name: 'created_at'
@@ -133,16 +137,14 @@
 
                         $("#motorList").html(list)
                     }
-
-
-                    console.log(data);
-
                     if (data['bukti_pembayaran'] != null && data['bukti_pembayaran'] != '') {
                         const buktiGambar = `/bukti/${data['bukti_pembayaran']}`;
                         $("#card-bukti-pembayaran").removeClass('d-none')
                         $("#gambar-bukti-pembayaran").attr('src', buktiGambar);
                         $("#buka-gambar").attr('href', buktiGambar)
                         $("#updated_at").html(data['updated_at_formatted'])
+                    } else {
+                        $("#card-bukti-pembayaran").addClass('d-none');
                     }
                 }
             });

@@ -65,13 +65,21 @@ class AdminController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn  = '<button data-id="' . $row->id . '" class="edit btn btn-primary btn-sm py-2 px-3 detail-button">Detail</button>';
-                $btn .= '<div data-id="' . $row->id . '" class="edit btn btn-outline-primary btn-sm py-2 px-3 ml-2">' . $row->konfirmasi . '</div>';;
+                $btn .= '<a href="/konfirmasi-pembayaran-get/' . Crypt::encrypt($row->id) . '" class="edit btn btn-outline-primary btn-sm py-2 px-3 ml-2">Konfirmasi</a>';;
                 return $btn;
             })
             ->rawColumns(['action'])
             ->editColumn('created_at', function ($data) {
                 return Carbon::parse($data->created_at)->format('Y-m-d H:i:s');
             })
+            ->editColumn('konfirmasi', function ($data) {
+                if ($data->konfirmasi == 'Belum Di Konfirmasi') {
+                    return '<div class="btn btn-outline-primary py-2">Belum Di Konfirmasi</div>';
+                } else {
+                    return '<div class="btn btn-primary py-2">Sudah Di Konfirmasi</div>';
+                }
+            })
+            ->rawColumns(['konfirmasi', 'action'])
             ->make(true);
         return $res;
     }
@@ -92,6 +100,16 @@ class AdminController extends Controller
 
         if (!$request->has('id')) return redirect()->to('/table')->with(['error' => 'Undefined id value']);
         $participantId = $request->input('id');
+        $updated       = Participant::where('id', $participantId)->update(['konfirmasi' => 'Konfirmasi']);
+        if (!$updated) return redirect()->to('/table')->with(['error' => 'Database Error']);
+
+        $detail         = Participant::find($participantId);
+        return redirect()->to('/table')->with(['pesan' => 'Selamat! Pendaftaran ' . $detail->nama . ' berhasil di konfirmasi']);
+    }
+
+    public function konfirmasiPembayaranGet($participantId, Request $request)
+    {
+        $participantId = Crypt::decrypt($participantId);
         $updated       = Participant::where('id', $participantId)->update(['konfirmasi' => 'Konfirmasi']);
         if (!$updated) return redirect()->to('/table')->with(['error' => 'Database Error']);
 

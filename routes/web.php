@@ -40,3 +40,4 @@ Route::get('load-table', [AdminController::class, 'loadTable']);
 
 Route::post('detail', [AdminController::class, 'getDetail'])->name('participant.detail');
 Route::post('konfirmasi-pembayaran', [AdminController::class, 'konfirmasiPembayaran']);
+Route::get('konfirmasi-pembayaran-get/{participantId}', [AdminController::class, 'konfirmasiPembayaranGet']);

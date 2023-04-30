@@ -95,10 +95,12 @@ class AdminController extends Controller
             $participantId = $request->input('participantId');
             $detail = Participant::with('motor')->find($participantId);
             $updatedAt = Carbon::parse($detail->updated_at)->format('F j, Y h:i:s A');
+            $lastThreeDigits  = substr($detail->telepon, -3);
+
 
             $totalBiaya = Motor::where('participantId', $participantId)->sum('biaya');
             $detail->updated_at_formatted = $updatedAt;
-            $detail->totalBiaya = $totalBiaya;
+            $detail->totalBiaya = $totalBiaya + intval($lastThreeDigits);
             return response()->json(['message' => 'OK', 'data' => $detail], 200);
         }
     }

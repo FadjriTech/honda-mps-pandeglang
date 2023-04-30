@@ -70,6 +70,17 @@
                                     </tr>
                                 </table>
                                 <hr>
+
+                                <p class="my-2 fst-italic">
+                                    Silahkan Transfer ke Bank berikut :
+                                    <br>
+                                    No Rekening : 0000000001300
+                                    <br>
+                                    Nama Bank : BANK BJB
+                                    <br>
+                                    Atas Nama : Kejurnas MXMPS
+                                </p>
+                                <hr>
                                 <div class="row">
                                     <div class="col">
                                         <h6>Daftar Kelas yang di ikuti :</h6>
@@ -100,6 +111,7 @@
                                 </label>
                                 <input type="file" class="form-control" id="bukti_pembayaran"
                                     name="bukti_pembayaran">
+
                             </div>
                             <button type="submit"
                                 class="btn btn-primary w-100 d-flex align-items-center gap-2 justify-content-center">

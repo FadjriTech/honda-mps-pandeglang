@@ -98,7 +98,12 @@ class BaseController extends Controller
         $participantId = Crypt::decrypt($participantId);
         $participant = collect(Participant::with('motor')->find($participantId));
         $totalBiaya  = Motor::where('participantId', $participantId)->sum('biaya');
-        $participant['total_biaya'] = $totalBiaya;
+
+
+        $participantPhone = Participant::find($participantId)->telepon;
+        $lastThreeDigits  = substr($participantPhone, -3);
+
+        $participant['total_biaya'] = $totalBiaya + $lastThreeDigits;
 
         return view('pages.pembayaran', ['data' => $participant]);
     }

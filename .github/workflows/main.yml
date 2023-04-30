@@ -17,4 +17,4 @@
 #           server: ftp.hondampspandeglang.com
 #           username: ${{ secrets.FTP_USERNAME }}
 #           password: ${{ secrets.FTP_PASSWORD }}
-#           server-dir: "/"
+#           server-dir: "/laravel/"

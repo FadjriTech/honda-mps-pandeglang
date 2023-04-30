@@ -100,16 +100,18 @@
 
             <tbody>
                 @foreach ($participant as $index => $item)
-                    <tr>
-                        <td class="table-info">{{ $index + 1 }}</td>
-                        <td>#{{ $item->id }}{{ $item->participant->nama }}<br>
-                            <span class="badge rounded-pill text-bg-danger">{{ $item->participant->kota }}</span>
-                        </td>
-                        <td>{{ $item->merk }}</td>
-                        <td>{{ $item->participant->tim }}</td>
-                        <td>{{ $item->kategori }}</td>
-                        <td>{{ $item->participant->konfirmasi }}</td>
-                    </tr>
+                    @if ($participant != null)
+                        <tr>
+                            <td class="table-info">{{ $index + 1 }}</td>
+                            <td>#{{ $item->id }}{{ $item->participant->nama }}<br>
+                                <span class="badge rounded-pill text-bg-danger">{{ $item->participant->kota }}</span>
+                            </td>
+                            <td>{{ $item->merk }}</td>
+                            <td>{{ $item->participant->tim }}</td>
+                            <td>{{ $item->kategori }}</td>
+                            <td>{{ $item->participant->konfirmasi }}</td>
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
             </thead>

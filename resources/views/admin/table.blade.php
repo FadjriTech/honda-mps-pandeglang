@@ -113,11 +113,9 @@
 
 
                     const motor = data['motor'];
-                    let total = 0;
                     if (motor.length > 0) {
                         let list = '';
                         motor.forEach((key, index) => {
-                            total += key.biaya
                             list += ` <tr>
                                             <th scope="row">${index + 1}</th>
                                             <td>${key.kelas}</td>
@@ -130,7 +128,7 @@
 
                         list += `<tr>
                             <td colspan="5">Total Biaya Pendaftaran</td>    
-                            <td>${formatRupiah(total)}</td>    
+                            <td>${formatRupiah(data['totalBiaya'])}</td>    
                         </tr>`
 
                         $("#motorList").html(list)

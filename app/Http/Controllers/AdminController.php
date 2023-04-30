@@ -38,7 +38,6 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-
         $totalParticipant = Participant::count();
         $confirmedParticipant = Participant::where('konfirmasi', 'Konfirmasi')->count();
         $unconfirmedParticipant = Participant::where('konfirmasi', 'Belum Di Konfirmasi')->count();
@@ -96,7 +95,10 @@ class AdminController extends Controller
             $participantId = $request->input('participantId');
             $detail = Participant::with('motor')->find($participantId);
             $updatedAt = Carbon::parse($detail->updated_at)->format('F j, Y h:i:s A');
+
+            $totalBiaya = Motor::where('participantId', $participantId)->sum('biaya');
             $detail->updated_at_formatted = $updatedAt;
+            $detail->totalBiaya = $totalBiaya;
             return response()->json(['message' => 'OK', 'data' => $detail], 200);
         }
     }

@@ -111,6 +111,7 @@ class BaseController extends Controller
                 'bukti_pembayaran' => 'required|image'
             ]);
 
+
             $participantId = $request->input('participantId');
             $image = $request->file('bukti_pembayaran');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -124,15 +125,19 @@ class BaseController extends Controller
                 }
             }
 
-            $imageCompressor = new ImageManager();
-            $image = $imageCompressor->make($image);
-            $image->resize(500, 500, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save(public_path('bukti') . '/' . $imageName);
+
+
+            // save image
+            $image->move(public_path('bukti'), $imageName);
+
+            // $imageCompressor = new ImageManager();
+            // $image = $imageCompressor->make($image);
+            // $image->resize(500, 500, function ($constraint) {
+            //     $constraint->aspectRatio();
+            // })->save(public_path('bukti') . '/' . $imageName);
 
             # update DB
-            Participant::where('id', $participantId)->update(['bukti_pembayaran' => $imageName]);
-
+            $update = Participant::where('id', $participantId)->update(['bukti_pembayaran' => $imageName]);
             return redirect()->back()->with(['pesan' => 'Upload bukti pembayaran berhasil, Tunggu Konfirmasi 😊']);
         } catch (Exception $error) {
             return redirect()->back()->withInput();

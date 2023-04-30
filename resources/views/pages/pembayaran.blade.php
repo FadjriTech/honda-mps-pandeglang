@@ -101,7 +101,7 @@
                                 <input type="file" class="form-control" id="bukti_pembayaran"
                                     name="bukti_pembayaran">
                             </div>
-                            <button type="submit" href="#"
+                            <button type="submit"
                                 class="btn btn-primary w-100 d-flex align-items-center gap-2 justify-content-center">
                                 Upload Bukti Pembayaran <i class="bi bi-upload"></i>
                             </button>

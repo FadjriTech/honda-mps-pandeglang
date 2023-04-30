@@ -15,10 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.app');
-});
-
+Route::get('/', [BaseController::class, 'index']);
+Route::get('/peraturan', [BaseController::class, 'peraturan']);
+Route::get('/hasil-lomba', [BaseController::class, 'hasilLomba']);
 
 Route::prefix('form')->group(function () {
     Route::match(['GET', 'POST'], '/', [BaseController::class, 'form']);
@@ -30,26 +29,37 @@ Route::post('/upload-bukti-pembayaran', [BaseController::class, 'buktiPembayaran
 Route::get('daftar-peserta', [BaseController::class, 'daftarPeserta']);
 
 Route::post('post-login', [AdminController::class, 'postLogin']);
-Route::get('login', function () {
-    return view('admin.login');
-});
 
 
 
 
+Route::prefix('/')->group(function () {
 
+    Route::prefix('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->middleware('admin.auth');
+        Route::get('login', function () {
+            return view('admin.login');
+        });
+        Route::get('logout', [AdminController::class, 'logout']);
+    });
 
-Route::post('upload-pengumuman', [AdminController::class, 'uploadPengumuman']);
-Route::get('admin', [AdminController::class, 'index']);
-Route::get('table', [AdminController::class, 'table']);
-Route::get('load-table', [AdminController::class, 'loadTable']);
+    Route::post('upload-pengumuman', [AdminController::class, 'uploadPengumuman']);
+    Route::post('upload-pemenang', [AdminController::class, 'uploadPemenang']);
+    Route::get('table', [AdminController::class, 'table']);
+    Route::get('load-table', [AdminController::class, 'loadTable']);
 
-Route::post('detail', [AdminController::class, 'getDetail'])->name('participant.detail');
-Route::post('konfirmasi-pembayaran', [AdminController::class, 'konfirmasiPembayaran']);
-Route::get('konfirmasi-pembayaran-get/{participantId}', [AdminController::class, 'konfirmasiPembayaranGet']);
-Route::delete('/delete-participant/{participantId}', [AdminController::class, 'deleteParticipant']);
-Route::get('announcement', function () {
-    return view('admin.pengumuman', [
-        'active' => 'pengumuman'
-    ]);
+    Route::post('detail', [AdminController::class, 'getDetail'])->name('participant.detail');
+    Route::post('konfirmasi-pembayaran', [AdminController::class, 'konfirmasiPembayaran']);
+    Route::get('konfirmasi-pembayaran-get/{participantId}', [AdminController::class, 'konfirmasiPembayaranGet']);
+    Route::delete('/delete-participant/{participantId}', [AdminController::class, 'deleteParticipant']);
+    Route::get('announcement', function () {
+        return view('admin.pengumuman', [
+            'active' => 'pengumuman'
+        ]);
+    });
+    Route::get('champion', function () {
+        return view('admin.juara', [
+            'active' => 'juara'
+        ]);
+    });
 });

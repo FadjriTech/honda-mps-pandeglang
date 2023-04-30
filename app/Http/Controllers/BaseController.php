@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Motocross;
 use App\Models\Motor;
 use App\Models\Participant;
+use App\Models\Pengumuman;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -12,6 +13,26 @@ use Intervention\Image\ImageManager;
 
 class BaseController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        return view('pages.app');
+    }
+
+    public function peraturan()
+    {
+        $peraturan = Pengumuman::where('jenis', 'peraturan')->first();
+        if (!$peraturan) return redirect()->to('/')->with(['error' => 'Maaf peraturan belum ada']);
+        return response()->download(public_path('/pengumuman/' . $peraturan->file));
+    }
+
+    public function hasilLomba()
+    {
+        $pemenang = Pengumuman::where('jenis', 'pemenang')->first();
+        if (!$pemenang) return redirect()->to('/')->with(['error' => 'Maaf hasil lomba belum ada']);
+        return response()->download(public_path('/pengumuman/' . $pemenang->file));
+    }
+
     public function form(Request $request)
     {
 

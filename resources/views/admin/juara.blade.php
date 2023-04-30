@@ -20,13 +20,13 @@
                 @endif
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Peraturan Pelengkap Perlombaan PUP</h5>
+                        <h5 class="card-title">Hasil Pemenang Lomba</h5>
                         <h6 class="card-subtitle mb-3 text-muted">Upload file PDF/XLSX/DOCS sesuai judul di atas</h6>
-                        <form action="/upload-pengumuman" method="POST" enctype="multipart/form-data">
+                        <form action="/upload-pemenang" method="POST" enctype="multipart/form-data">
                             @csrf
                             <label for="file" class="input-file">
                                 <span id="label">Browse File</span>
-                                <input type="file" id="file" class="d-none" name="peraturan">
+                                <input type="file" id="file" class="d-none" name="pemenang">
                             </label>
                             <button class="btn btn-primary mb-2" style="width: 100%">Upload</button>
                         </form>

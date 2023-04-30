@@ -9,6 +9,7 @@ use App\Models\Pengumuman;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
 
@@ -26,10 +27,11 @@ class AdminController extends Controller
 
         $user     = AdminModel::where('username', $username)->first();
         if (!$user) return redirect()->back()->withErrors(['message' => 'Maaf username tidak tersedia']);
-        if ($password != $password) return redirect()->back()->withErrors(['message' => 'Maaf password tidak sesuai']);
+
+        if (Hash::check($password, $user->password)) return redirect()->back()->withErrors(['message' => 'Maaf password tidak sesuai']);
 
         # save user session
-        Session::put('account', $user);
+        Session::put('admin', $user);
         return redirect()->to('/admin');
     }
 
@@ -146,7 +148,7 @@ class AdminController extends Controller
         $request->validate([
             'peraturan' => 'required|file'
         ], [
-            'peraturan.required' => 'Pilih File PDF terlebih Dahulu'
+            'peraturan.required' => 'Pilih File terlebih Dahulu'
         ]);
 
 
@@ -177,6 +179,52 @@ class AdminController extends Controller
         ];
 
         Pengumuman::create($formData);
-        return redirect()->back()->with(['pesan' => 'Peraturan .pdf berhasil di upload']);
+        return redirect()->back()->with(['pesan' => 'File berhasil di upload']);
+    }
+
+    public function uploadPemenang(Request $request)
+    {
+
+        $request->validate([
+            'pemenang' => 'required|file'
+        ], [
+            'pemenang.required' => 'Pilih File terlebih Dahulu'
+        ]);
+
+
+
+        // cek apakah sudah ada file pemenang
+        $pemenang = Pengumuman::where('jenis', 'pemenang')->first();
+        if ($pemenang) {
+            $pemenangPath = public_path('pengumuman/' . $pemenang->file);
+            if (file_exists($pemenangPath)) {
+                unlink($pemenangPath);
+            }
+        }
+
+        Pengumuman::where('jenis', 'pemenang')->delete();
+        $file = $request->file('pemenang');
+        $directory = public_path('pengumuman');
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+
+        $filename = $file->getClientOriginalName();
+        $file->move($directory, $filename);
+
+        $formData = [
+            'file' => $filename,
+            'jenis' => 'pemenang',
+        ];
+
+        Pengumuman::create($formData);
+        return redirect()->back()->with(['pesan' => 'File berhasil di upload']);
+    }
+
+    public function logout()
+    {
+        session()->flush();
+        return redirect()->to('/admin/login');
     }
 }

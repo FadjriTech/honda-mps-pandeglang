@@ -15,7 +15,13 @@
         <li class="nav-item {{ $active == 'pengumuman' ? 'active' : '' }}">
             <a class="nav-link" href="/announcement">
                 <i class="ti-bookmark-alt menu-icon"></i>
-                <span class="menu-title">Pengumuman</span>
+                <span class="menu-title">Peraturan</span>
+            </a>
+        </li>
+        <li class="nav-item {{ $active == 'juara' ? 'active' : '' }}">
+            <a class="nav-link" href="/champion">
+                <i class="ti-bookmark-alt menu-icon"></i>
+                <span class="menu-title">Juara</span>
             </a>
         </li>
     </ul>

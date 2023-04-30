@@ -14,7 +14,7 @@
         </ul>
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
-                <a class="dropdown-item">
+                <a class="dropdown-item" href="/admin/logout">
                     <i class="ti-power-off text-primary"></i>
                     Logout
                 </a>

@@ -25,8 +25,15 @@
 
             <div class="container w-full mt-5" style="z-index: 20">
                 <div class="row">
+                    <div class="col-12">
+                        @if (Session::has('error'))
+                            <div class="alert alert-warning" role="alert">
+                                <h6 class="alert-heading m-0">{{ Session::get('error') }}</h6>
+                            </div>
+                        @endif
+                    </div>
                     <div class="col-12 w-100">
-                        <a href="/form" class="main-button mb-2">
+                        <a href="/peraturan" class="main-button mb-2">
                             Peraturan Pelengkap Perlombaan (PUP)
                         </a>
                         <a href="/form" class="main-button mb-2">
@@ -35,7 +42,7 @@
                         <a href="/daftar-peserta" class="main-button mb-2">
                             Daftar Peserta
                         </a>
-                        <a href="" class="main-button mb-2">
+                        <a href="/hasil-lomba" class="main-button mb-2">
                             Hasil Lomba
                         </a>
                     </div>

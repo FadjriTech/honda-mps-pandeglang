@@ -44,7 +44,7 @@ class BaseController extends Controller
         } else {
             $request->validate([
                 'nama'          => 'required',
-                'telepon'       => 'required',
+                'telepon'       => 'required|unique:participant,telepon',
                 'KIS'           => 'required',
                 'tanggal_lahir' => 'required',
                 'start'         => 'required',

@@ -62,6 +62,14 @@
                         </div>
                         <hr style="border:1px solid black">
 
+                        @if (Session::has('errors'))
+                            <div class="alert alert-warning" role="alert">
+                                <h4 class="alert-heading m-0">Oops sorry! 😟</h4>
+                                <hr>
+                                <p class="m-0">{{ Session::get('errors')->first() }}</p>
+                            </div>
+                        @endif
+
                         <form action="/form" method="post">
                             @csrf
                             <div class="mb-3 d-flex gap-2 flex-column">

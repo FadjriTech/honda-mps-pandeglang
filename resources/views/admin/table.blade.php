@@ -21,7 +21,10 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Daftar Participant</h4>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 class="card-title">Daftar Participant</h4>
+                            <a href="/export" class="btn btn-outline-success">Export Excel</a>
+                        </div>
                         <div class="table-responsive">
                             <table class="table" id="participant-table">
                                 <thead>

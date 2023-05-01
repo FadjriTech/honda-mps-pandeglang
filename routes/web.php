@@ -26,21 +26,22 @@ Route::prefix('form')->group(function () {
 Route::get('/pembayaran/{participantId}', [BaseController::class, 'pembayaran']);
 Route::get('/konfirmasi-pembayaran/{participantId}', [BaseController::class, 'konfirmasiPembayaran']);
 Route::post('/upload-bukti-pembayaran', [BaseController::class, 'buktiPembayaran']);
-
 Route::get('daftar-peserta', [BaseController::class, 'daftarPeserta']);
-
 Route::post('post-login', [AdminController::class, 'postLogin']);
 
 
 
 
-Route::prefix('/')->group(function () {
 
+Route::get('admin/login', function () {
+    return view('admin.login');
+});
+
+Route::prefix('/')->middleware('admin.auth')->group(function () {
+
+    Route::get('export', [AdminController::class, 'export']);
     Route::prefix('admin')->group(function () {
-        Route::get('/', [AdminController::class, 'index'])->middleware('admin.auth');
-        Route::get('login', function () {
-            return view('admin.login');
-        });
+        Route::get('/', [AdminController::class, 'index']);
         Route::get('logout', [AdminController::class, 'logout']);
     });
 

@@ -23,14 +23,22 @@ class BaseController extends Controller
     {
         $peraturan = Pengumuman::where('jenis', 'peraturan')->first();
         if (!$peraturan) return redirect()->to('/')->with(['error' => 'Maaf peraturan belum ada']);
-        return response()->download(public_path('/pengumuman/' . $peraturan->file));
+        if (getenv('APP_DEBUG')) {
+            return response()->download(public_path('/pengumuman/' . $peraturan->file));
+        } else {
+            return response()->download('/pengumuman/' . $peraturan->file);
+        }
     }
 
     public function hasilLomba()
     {
         $pemenang = Pengumuman::where('jenis', 'pemenang')->first();
         if (!$pemenang) return redirect()->to('/')->with(['error' => 'Maaf hasil lomba belum ada']);
-        return response()->download(public_path('/pengumuman/' . $pemenang->file));
+        if (getenv('APP_DEBUG')) {
+            return response()->download(public_path('/pengumuman/' . $pemenang->file));
+        } else {
+            return response()->download('/pengumuman/' . $pemenang->file);
+        }
     }
 
     public function form(Request $request)
@@ -139,7 +147,11 @@ class BaseController extends Controller
             // Delete old image if it exists
             $oldImageName = Participant::where('id', $participantId)->value('bukti_pembayaran');
             if ($oldImageName) {
-                $oldImagePath = public_path('bukti') . '/' . $oldImageName;
+                if (getenv('APP_DEBUG')) {
+                    $oldImagePath = public_path('bukti') . '/' . $oldImageName;
+                } else {
+                    $oldImagePath = '/bukti/' . $oldImageName;
+                }
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
@@ -148,7 +160,11 @@ class BaseController extends Controller
 
 
             // save image
-            $image->move(public_path('bukti'), $imageName);
+            if (getenv('APP_DEBUG')) {
+                $image->move(public_path('bukti'), $imageName);
+            } else {
+                $image->move('bukti', $imageName);
+            }
 
             // $imageCompressor = new ImageManager();
             // $image = $imageCompressor->make($image);

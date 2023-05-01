@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminModel;
+use App\Models\Motocross;
 use App\Models\Motor;
 use App\Models\Participant;
 use App\Models\Pengumuman;
@@ -11,7 +12,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Yajra\DataTables\DataTables;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpParser\Node\Stmt\Break_;
 
 class AdminController extends Controller
 {
@@ -140,7 +146,11 @@ class AdminController extends Controller
         if (!$participant) return response()->json(['message' => 'uknown participant'], 404);
         if ($participant->bukti_pembayaran != null && $participant->bukti_pembayaran != '') {
 
-            $filePath = public_path('bukti/' . $participant->bukti_pembayaran);
+            if (getenv('APP_DEBUG')) {
+                $filePath = public_path('bukti/' . $participant->bukti_pembayaran);
+            } else {
+                $filePath = '/bukti/' . $participant->bukti_pembayaran;
+            }
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
@@ -163,7 +173,11 @@ class AdminController extends Controller
         // cek apakah sudah ada file peraturan
         $peraturan = Pengumuman::where('jenis', 'peraturan')->first();
         if ($peraturan) {
-            $peraturanPath = public_path('pengumuman/' . $peraturan->file);
+            if (getenv('APP_DEBUG')) {
+                $peraturanPath = public_path('pengumuman/' . $peraturan->file);
+            } else {
+                $peraturanPath = '/pengumuman/' . $peraturan->file;
+            }
             if (file_exists($peraturanPath)) {
                 unlink($peraturanPath);
             }
@@ -171,7 +185,11 @@ class AdminController extends Controller
 
         $deleteOld = Pengumuman::where('jenis', 'peraturan')->delete();
         $file = $request->file('peraturan');
-        $directory = public_path('pengumuman');
+        if (getenv('APP_DEBUG')) {
+            $directory = public_path('pengumuman');
+        } else {
+            $directory = 'pengumuman';
+        }
         if (!is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
@@ -203,7 +221,11 @@ class AdminController extends Controller
         // cek apakah sudah ada file pemenang
         $pemenang = Pengumuman::where('jenis', 'pemenang')->first();
         if ($pemenang) {
-            $pemenangPath = public_path('pengumuman/' . $pemenang->file);
+            if (getenv('APP_DEBUG')) {
+                $pemenangPath = public_path('pengumuman/' . $pemenang->file);
+            } else {
+                $pemenangPath = '/pengumuman/' . $pemenang->file;
+            }
             if (file_exists($pemenangPath)) {
                 unlink($pemenangPath);
             }
@@ -211,7 +233,11 @@ class AdminController extends Controller
 
         Pengumuman::where('jenis', 'pemenang')->delete();
         $file = $request->file('pemenang');
-        $directory = public_path('pengumuman');
+        if (getenv('APP_DEBUG')) {
+            $directory = public_path('pengumuman');
+        } else {
+            $directory = 'pengumuman';
+        }
         if (!is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
@@ -227,6 +253,136 @@ class AdminController extends Controller
 
         Pengumuman::create($formData);
         return redirect()->back()->with(['pesan' => 'File berhasil di upload']);
+    }
+
+    public function export()
+    {
+        // Get motocross value
+        $motocross = collect(Motocross::all());
+        $participants = collect(Participant::with('motor')->get());
+
+        $data = array(
+            array('no', 'nama lengkap', 'no kis', 'tanggal lahir', 'no star', 'team', 'kota asal', 'no wa', 'biaya pendaftaran')
+        );
+
+        $spreadsheet = new Spreadsheet();
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        // Add header row to worksheet
+        $worksheet->fromArray($data);
+
+        // Merge cells in header row
+        $lastColumn = $worksheet->getHighestColumn();
+        $lastColumnIndex = Coordinate::columnIndexFromString($lastColumn);
+        for ($i = 1; $i <= $lastColumnIndex; $i++) {
+            $columnLetter = Coordinate::stringFromColumnIndex($i);
+            $worksheet->mergeCells($columnLetter . '1:' . $columnLetter . '2');
+        }
+
+        // Center align header cells vertically and horizontally
+        $headerStyle = [
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ];
+
+
+
+        // motocross header
+        $motocrossRange = range('J', 'Q');
+        $GrassRange     = range('R', 'U');
+        $ExecutiveRange = range('V', 'Y');
+
+        //-- set Header center
+        $worksheet->mergeCells("J1:Q1")->setCellValue("J1", "Motocross");
+        $worksheet->mergeCells("R1:U1")->setCellValue("R1", "Grass Track");
+        $worksheet->mergeCells("V1:Y1")->setCellValue("V1", "Executive");
+
+
+        foreach ($motocross->where('kelas', 'Utama Motocross')->values() as $kelasIndex => $kelas) {
+            $worksheet->setCellValue($motocrossRange[$kelasIndex] . '2', $kelas->nama);
+        }
+
+        foreach ($motocross->where('kelas', 'Grass Track')->values() as $kelasIndex => $kelas) {
+            $worksheet->setCellValue($GrassRange[$kelasIndex] . '2', $kelas->nama);
+        }
+
+        foreach ($motocross->where('kelas', 'Executive')->values() as $kelasIndex => $kelas) {
+            $worksheet->setCellValue($ExecutiveRange[$kelasIndex] . '2', $kelas->nama);
+        }
+
+
+
+
+        $startFromRow = 3;
+        $keys = ['id', 'nama', 'KIS', 'tanggal_lahir', 'start', 'tim', 'kota', 'telepon', 'telepon'];
+        foreach ($participants as $participant) {
+
+
+            // --- set participant column value
+            $motor = collect($participant['motor']);
+            $totalBiaya = $motor->sum('biaya');
+            foreach (range('A', 'H') as $index => $column) {
+                $worksheet->setCellValue($column . strval($startFromRow), $participant[$keys[$index]]);
+            }
+            $worksheet->setCellValue('I' . $startFromRow, $this->format_rupiah($totalBiaya));
+
+
+            // Check participant class registered 
+            foreach ($motocross->where('kelas', 'Utama Motocross')->values() as $kelasIndex => $kelas) {
+                $cekkelas = $motor->where('kategori', $kelas->nama);
+                if (sizeof($cekkelas->toArray()) > 0) {
+                    $worksheet->setCellValue($motocrossRange[$kelasIndex] . $startFromRow, 'V');
+                }
+            }
+
+            foreach ($motocross->where('kelas', 'Grass Track')->values() as $kelasIndex => $kelas) {
+                $cekkelas = $motor->where('kategori', $kelas->nama);
+                if (sizeof($cekkelas->toArray()) > 0) {
+                    $worksheet->setCellValue($GrassRange[$kelasIndex] . $startFromRow, 'V');
+                }
+            }
+
+
+            foreach ($motocross->where('kelas', 'Executive')->values() as $kelasIndex => $kelas) {
+                $cekkelas = $motor->where('kategori', $kelas->nama);
+                if (sizeof($cekkelas->toArray()) > 0) {
+                    $worksheet->setCellValue($ExecutiveRange[$kelasIndex] . $startFromRow, 'V');
+                }
+            }
+            $startFromRow++;
+        }
+
+
+        $headerRange = 'A1:Z2';
+        $worksheet->getStyle($headerRange)->applyFromArray($headerStyle);
+
+
+        // Autofit column width
+        foreach (range('A', 'Z') as $column) {
+            $worksheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        // Set the file name and extension
+        $filename = 'honda-mps-recap-' . time() . '.xlsx';
+
+        // Send the appropriate headers to initiate the download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        // Output the Excel file contents
+        $writer->save('php://output');
+    }
+
+
+    function format_rupiah($angka)
+    {
+        $rupiah = "Rp " . number_format($angka, 0, ',', '.');
+        return $rupiah;
     }
 
     public function logout()

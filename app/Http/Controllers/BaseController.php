@@ -92,7 +92,7 @@ class BaseController extends Controller
         }
     }
 
-    public function pembayaran($participantId, Request $request)
+    public function pembayaran($participantId)
     {
 
         $participantId = Crypt::decrypt($participantId);
@@ -106,6 +106,21 @@ class BaseController extends Controller
         $participant['total_biaya'] = $totalBiaya + $lastThreeDigits;
 
         return view('pages.pembayaran', ['data' => $participant]);
+    }
+
+    public function konfirmasiPembayaran($participantId)
+    {
+        $participantId = Crypt::decrypt($participantId);
+        $participant = collect(Participant::with('motor')->find($participantId));
+        $totalBiaya  = Motor::where('participantId', $participantId)->sum('biaya');
+
+
+        $participantPhone = Participant::find($participantId)->telepon;
+        $lastThreeDigits  = substr($participantPhone, -3);
+
+        $participant['total_biaya'] = $totalBiaya + $lastThreeDigits;
+
+        return view('pages.konfirmasi-pembayaran', ['data' => $participant]);
     }
 
     public function buktiPembayaran(Request $request)
@@ -143,9 +158,9 @@ class BaseController extends Controller
 
             # update DB
             $update = Participant::where('id', $participantId)->update(['bukti_pembayaran' => $imageName]);
-            return redirect()->back()->with(['pesan' => 'Upload bukti pembayaran berhasil, Tunggu Konfirmasi 😊']);
+            return redirect()->to('/konfirmasi-pembayaran/' . Crypt::encrypt($participantId))->with(['pesan' => 'Upload bukti pembayaran berhasil, Tunggu Konfirmasi 😊']);
         } catch (Exception $error) {
-            return redirect()->back()->withInput();
+            return redirect()->back()->with(['error' => $error->getMessage()]);
         }
     }
 

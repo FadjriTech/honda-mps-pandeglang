@@ -71,6 +71,9 @@ class AdminController extends Controller
                 $btn .= '<a href="/konfirmasi-pembayaran-get/' . Crypt::encrypt($row->id) . '" class="edit btn btn-outline-primary btn-sm py-2 px-3 ml-2">
                     Konfirmasi
                 </a>';
+                $btn .= '<a target="_blank" href="https://wa.me/+62' . $row->telepon . '" class="edit btn btn-outline-success btn-sm py-2 px-3 ml-2">
+                Whatsapp
+                </a>';
                 return $btn;
             })
             ->rawColumns(['action'])

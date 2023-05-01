@@ -24,6 +24,7 @@ Route::prefix('form')->group(function () {
 });
 
 Route::get('/pembayaran/{participantId}', [BaseController::class, 'pembayaran']);
+Route::get('/konfirmasi-pembayaran/{participantId}', [BaseController::class, 'konfirmasiPembayaran']);
 Route::post('/upload-bukti-pembayaran', [BaseController::class, 'buktiPembayaran']);
 
 Route::get('daftar-peserta', [BaseController::class, 'daftarPeserta']);

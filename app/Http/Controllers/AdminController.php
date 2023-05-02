@@ -157,6 +157,7 @@ class AdminController extends Controller
         }
 
         $participant->delete();
+        Motor::where('participantId', $participantId)->delete();
         return response()->json(['message' => 'Participant berhasil dihapus'], 200);
     }
 

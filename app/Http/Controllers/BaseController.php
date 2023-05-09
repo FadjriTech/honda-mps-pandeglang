@@ -52,7 +52,7 @@ class BaseController extends Controller
         } else {
             $request->validate([
                 'nama'          => 'required',
-                'telepon'       => 'required|unique:participant,telepon',
+                'telepon'       => 'required',
                 'KIS'           => 'required',
                 'tanggal_lahir' => 'required',
                 'start'         => 'required',
@@ -107,11 +107,8 @@ class BaseController extends Controller
         $participant = collect(Participant::with('motor')->find($participantId));
         $totalBiaya  = Motor::where('participantId', $participantId)->sum('biaya');
 
-
-        $participantPhone = Participant::find($participantId)->telepon;
-        $lastThreeDigits  = substr($participantPhone, -3);
-
-        $participant['total_biaya'] = $totalBiaya + $lastThreeDigits;
+        $lastOneDigits  = substr($participantId, -1);
+        $participant['total_biaya'] = $totalBiaya + $lastOneDigits;
 
         return view('pages.pembayaran', ['data' => $participant]);
     }
